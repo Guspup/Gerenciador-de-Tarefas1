@@ -1,0 +1,7 @@
+com\techflow\tarefas\controller\TarefaController.class
+com\techflow\tarefas\repository\TarefaRepository.class
+com\techflow\tarefas\model\Tarefa.class
+com\techflow\tarefas\model\StatusTarefa.class
+com\techflow\tarefas\GerenciadorTarefasApplication.class
+com\techflow\tarefas\service\TarefaService.class
+com\techflow\tarefas\model\PrioridadeTarefa.class
