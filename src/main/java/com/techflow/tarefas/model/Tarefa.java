@@ -20,15 +20,20 @@ public class Tarefa {
     @Column(nullable = false)
     private StatusTarefa status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PrioridadeTarefa prioridade;
+
     private LocalDateTime dataCriacao;
 
     public Tarefa() {
     }
 
-    public Tarefa(String titulo, String descricao, StatusTarefa status) {
+    public Tarefa(String titulo, String descricao, StatusTarefa status, PrioridadeTarefa prioridade) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.status = status;
+        this.prioridade = prioridade;
     }
 
     @PrePersist
@@ -68,6 +73,14 @@ public class Tarefa {
 
     public void setStatus(StatusTarefa status) {
         this.status = status;
+    }
+
+    public PrioridadeTarefa getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(PrioridadeTarefa prioridade) {
+        this.prioridade = prioridade;
     }
 
     public LocalDateTime getDataCriacao() {

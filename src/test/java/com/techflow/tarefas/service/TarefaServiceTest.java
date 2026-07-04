@@ -1,5 +1,6 @@
 package com.techflow.tarefas.service;
 
+import com.techflow.tarefas.model.PrioridadeTarefa;
 import com.techflow.tarefas.model.StatusTarefa;
 import com.techflow.tarefas.model.Tarefa;
 import com.techflow.tarefas.repository.TarefaRepository;
@@ -31,13 +32,14 @@ class TarefaServiceTest {
 
     @Test
     void deveCriarTarefa() {
-        Tarefa tarefa = new Tarefa("Tarefa 1", "Descrição", StatusTarefa.A_FAZER);
+        Tarefa tarefa = new Tarefa("Tarefa 1", "Descrição", StatusTarefa.A_FAZER, PrioridadeTarefa.MEDIA);
         when(repository.save(any(Tarefa.class))).thenReturn(tarefa);
 
         Tarefa resultado = service.criarTarefa(tarefa);
 
         assertNotNull(resultado);
         assertEquals("Tarefa 1", resultado.getTitulo());
+        assertEquals(PrioridadeTarefa.MEDIA, resultado.getPrioridade());
         verify(repository, times(1)).save(tarefa);
     }
 
@@ -53,7 +55,7 @@ class TarefaServiceTest {
 
     @Test
     void deveBuscarPorId() {
-        Tarefa tarefa = new Tarefa("Tarefa", "Desc", StatusTarefa.A_FAZER);
+        Tarefa tarefa = new Tarefa("Tarefa", "Desc", StatusTarefa.A_FAZER, PrioridadeTarefa.BAIXA);
         when(repository.findById(1L)).thenReturn(Optional.of(tarefa));
 
         Optional<Tarefa> resultado = service.buscarPorId(1L);
@@ -64,8 +66,8 @@ class TarefaServiceTest {
 
     @Test
     void deveAtualizarTarefa() {
-        Tarefa tarefaExistente = new Tarefa("Antiga", "Desc", StatusTarefa.A_FAZER);
-        Tarefa novaTarefa = new Tarefa("Nova", "Desc", StatusTarefa.CONCLUIDO);
+        Tarefa tarefaExistente = new Tarefa("Antiga", "Desc", StatusTarefa.A_FAZER, PrioridadeTarefa.BAIXA);
+        Tarefa novaTarefa = new Tarefa("Nova", "Desc", StatusTarefa.CONCLUIDO, PrioridadeTarefa.ALTA);
         
         when(repository.existsById(1L)).thenReturn(true);
         when(repository.save(any(Tarefa.class))).thenReturn(novaTarefa);
@@ -74,6 +76,7 @@ class TarefaServiceTest {
 
         assertNotNull(resultado);
         assertEquals("Nova", resultado.getTitulo());
+        assertEquals(PrioridadeTarefa.ALTA, resultado.getPrioridade());
         verify(repository).save(novaTarefa);
     }
 
