@@ -28,6 +28,15 @@ public class TarefaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarTarefa(@PathVariable Long id) {
+        if (tarefaService.buscarPorId(id).isPresent()) {
+            tarefaService.deletarTarefa(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PostMapping
     public ResponseEntity<Tarefa> criarTarefa(@RequestBody Tarefa tarefa) {
         Tarefa novaTarefa = tarefaService.criarTarefa(tarefa);
