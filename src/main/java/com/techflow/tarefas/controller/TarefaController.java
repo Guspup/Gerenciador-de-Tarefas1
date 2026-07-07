@@ -19,7 +19,7 @@ public class TarefaController {
 
     @GetMapping
     public ResponseEntity<List<Tarefa>> listarTarefas() {
-        return ResponseEntity.ok(tarefaService.listarTarefas());
+        return ResponseEntity.ok(tarefaService.listarTodas());
     }
 
     @GetMapping("/{id}")

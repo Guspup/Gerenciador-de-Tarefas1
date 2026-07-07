@@ -44,13 +44,35 @@ class TarefaServiceTest {
     }
 
     @Test
-    void deveListarTarefas() {
+    void deveListarTodas() {
         when(repository.findAll()).thenReturn(Arrays.asList(new Tarefa(), new Tarefa()));
 
-        List<Tarefa> resultado = service.listarTarefas();
+        List<Tarefa> resultado = service.listarTodas();
 
         assertEquals(2, resultado.size());
         verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void deveSalvarTarefa() {
+        Tarefa tarefa = new Tarefa("Salvar", "Desc", StatusTarefa.A_FAZER, PrioridadeTarefa.BAIXA);
+        when(repository.save(any(Tarefa.class))).thenReturn(tarefa);
+
+        Tarefa resultado = service.salvar(tarefa);
+
+        assertNotNull(resultado);
+        verify(repository, times(1)).save(tarefa);
+    }
+
+    @Test
+    void deveConcluirTarefa() {
+        Tarefa tarefa = new Tarefa("Concluir", "Desc", StatusTarefa.A_FAZER, PrioridadeTarefa.BAIXA);
+        when(repository.findById(1L)).thenReturn(Optional.of(tarefa));
+
+        service.concluirTarefa(1L);
+
+        assertEquals(StatusTarefa.CONCLUIDO, tarefa.getStatus());
+        verify(repository).save(tarefa);
     }
 
     @Test
@@ -78,6 +100,19 @@ class TarefaServiceTest {
         assertEquals("Nova", resultado.getTitulo());
         assertEquals(PrioridadeTarefa.ALTA, resultado.getPrioridade());
         verify(repository).save(novaTarefa);
+    }
+
+    @Test
+    void deveListarConcluidas() {
+        Tarefa t1 = new Tarefa("T1", "Desc", StatusTarefa.CONCLUIDO, PrioridadeTarefa.ALTA);
+        Tarefa t2 = new Tarefa("T2", "Desc", StatusTarefa.A_FAZER, PrioridadeTarefa.BAIXA);
+        when(repository.findAll()).thenReturn(Arrays.asList(t1, t2));
+
+        List<Tarefa> resultado = service.listarConcluidas();
+
+        assertEquals(1, resultado.size());
+        assertEquals(StatusTarefa.CONCLUIDO, resultado.get(0).getStatus());
+        verify(repository, times(1)).findAll();
     }
 
     @Test
